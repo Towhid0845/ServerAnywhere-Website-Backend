@@ -32,16 +32,16 @@ module.exports.signUp = async (req, res) => {
 		const salt = await bcrypt.genSalt(10);
 		user.password = await bcrypt.hash(user.password, salt);
 		// user = await new User({ ...req.body, password: hashPassword }).save();
-		//const token = user.generateJWT();
-		const token = await new Token({
-			userId: user._id,
-			token: crypto.randomBytes(32).toString("hex"),
-		}).save();
+		const token = user.generateJWT();
+		// const token = await new Token({
+		// 	userId: user._id,
+		// 	token: crypto.randomBytes(32).toString("hex"),
+		// }).save();
 
 		const result = await user.save();
 		//save();
 
-		const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
+		const url = `${process.env.BASE_URL}user/${user.id}/verify/${token}`;
 		await sendEmail(user.email, "Verify Email", url);
 		return res.status(201).send({
 			// message: "Registration Successfull!!",

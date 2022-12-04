@@ -1,31 +1,37 @@
 const express = require("express");
-// const { User, validate } = require("../models/user");
+const { User, validate } = require("../models/user");
+const Token = require("../models/token");
 const router = express.Router();
 const {
 	signUp,
-	verify,
 	signIn,
 	verifyOTP,
 	resendOTP,
 } = require("../controllers/userControllers");
 const auth = require("../middlewares/authorize");
 const admin = require("../middlewares/admin");
+const auth1 = require("../middlewares/userauth");
 
 router.route("/signup").post(signUp);
-// router.route("/:id/verify/:token/").get(verify);
 router.get("/:id/verify/:token/", async (req, res) => {
 	try {
+		console.log("helloo");
+		// console.log(token);
+		// console.log(req.user._id);
+		const token = req.params.token;
+
 		const user = await User.findOne({ _id: req.params.id });
+		console.log(user);
 		if (!user) return res.status(400).send({ message: "Invalid link" });
 
-		const token = await Token.findOne({
-			userId: user._id,
-			token: req.params.token,
-		});
-		if (!token) return res.status(400).send({ message: "Invalid link" });
+		// const token = await Token.findOne({
+		// 	userId: user._id,
+		// 	token: req.params.token,
+		// });
+		if (!token) return res.status(400).send({ message: "Invalid token link" });
 
-		await User.updateOne({ _id: user._id, verified: true });
-		await token.remove();
+		await User.updateOne({ _id: user._id }, { verified: true });
+		//await token.remove();
 
 		res.status(200).send({ message: "Email verified successfully" });
 	} catch (error) {
