@@ -5,17 +5,17 @@ const router = express.Router();
 const {
 	signUp,
 	signIn,
-	verifyOTP,
-	resendOTP,
+	// verifyOTP,
+	// resendOTP,
 } = require("../controllers/userControllers");
-const auth = require("../middlewares/authorize");
-const admin = require("../middlewares/admin");
+// const auth = require("../middlewares/authorize");
+// const admin = require("../middlewares/admin");
 const auth1 = require("../middlewares/userauth");
 
 router.route("/signup").post(signUp);
 router.get("/:id/verify/:token/", async (req, res) => {
 	try {
-		console.log("helloo");
+		console.log("helloo from backend email verify");
 		// console.log(token);
 		// console.log(req.user._id);
 		const token = req.params.token;
@@ -41,7 +41,7 @@ router.get("/:id/verify/:token/", async (req, res) => {
 
 router.route("/signin").post(signIn);
 
-router.post("/verify-otp/", [auth, admin], verifyOTP);
-router.post("/resend-otp/", [auth, admin], resendOTP);
+// router.post("/verify-otp/", [auth, admin], verifyOTP);
+// router.post("/resend-otp/", [auth, admin], resendOTP);
 
 module.exports = router;

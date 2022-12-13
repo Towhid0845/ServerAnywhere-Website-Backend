@@ -1,7 +1,16 @@
 require("dotenv/config");
+const app = require("./app");
+const cors = require("cors");
+app.use(
+	cors({
+		origin: "http://localhost:3001",
+		methods: ["GET", "POST"],
+		credentials: true,
+	})
+);
 
 const mongoose = require("mongoose");
-const app = require("./app");
+
 mongoose
 	.connect(process.env.MONGODB_URL)
 	.then(() => console.log("Connected To MongoDB"))
